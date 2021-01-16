@@ -42,7 +42,7 @@ d3.json(geoData, data => {
     valueProperty: "median_HHI_2019",
 
  // Set color scale
- scale: ["#ffffb2", "#b10026"],
+ scale: ["white", "purple"],
 
  // Number of breaks in step range
  steps: 8,
@@ -62,6 +62,35 @@ d3.json(geoData, data => {
      "$" + feature.properties.median_HHI_2019);
  }
 }).addTo(myMap);
+
+// Set up the legend
+var legend = L.control({ position: "bottomright" });
+legend.onAdd = function() {
+  var div = L.DomUtil.create("div", "info legend");
+  var limits = geojsonIncome.options.limits;
+  var colors = geojsonIncome.options.colors;
+  var labels = [];
+
+  // Add min & max
+  var legendInfo = "<h1>Median Income</h1>" +
+    "<div class=\"labels\">" +
+      "<div class=\"min\">" + limits[0] + "</div>" +
+      "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
+    "</div>";
+
+  div.innerHTML = legendInfo;
+
+  limits.forEach(function(limit, index) {
+    labels.push("<li style=\"background-color: " + colors[index] + "\"></li>");
+  });
+
+  div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+  return div;
+};
+
+// Adding legend to the map
+legend.addTo(myMap);
+
 });
 
 //To make education chloropleth
@@ -72,7 +101,7 @@ d3.json(geoData, data => {
     valueProperty: "bach_deg_pct_14to18",
 
  // Set color scale
- scale: ["#ffffb2", "#b10026"],
+ scale: ["white", "green"],
 
  // Number of breaks in step range
  steps: 8,
@@ -91,6 +120,34 @@ d3.json(geoData, data => {
    layer.bindPopup("County Name: " + feature.properties.NAME + "<br>Bachelor degree(%):<br>" +
       feature.properties.bach_deg_pct_14to18 + "%")
  }}).addTo(myMap);
+
+ // Set up the legend
+ var legend = L.control({ position: "bottomright" });
+ legend.onAdd = function() {
+   var div = L.DomUtil.create("div", "info legend");
+   var limits = geojsonEducation.options.limits;
+   var colors = geojsonEducation.options.colors;
+   var labels = [];
+
+   // Add min & max
+   var legendInfo = "<h1>Bachelor degrees</h1>" +
+     "<div class=\"labels\">" +
+       "<div class=\"min\">" + limits[0] + "</div>" +
+       "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
+     "</div>";
+
+   div.innerHTML = legendInfo;
+
+   limits.forEach(function(limit, index) {
+     labels.push("<li style=\"background-color: " + colors[index] + "\"></li>");
+   });
+
+   div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+   return div;
+ };
+
+ // Adding legend to the map
+ legend.addTo(myMap);
 
 
 var baseMaps = {
