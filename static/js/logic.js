@@ -23,8 +23,6 @@ L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
   });
 // Load in data on breweries
 d3.csv("/Resources/breweries_v1.csv", function(data) {
-console.log(data);
-
 //Create clustered pub markers
 var pubMarkers = L.markerClusterGroup();
 //Still have to change .location, .descriptor, and .coordinates to match data source
@@ -35,20 +33,20 @@ data.forEach(pub => {
 myMap.addLayer(pubMarkers);
 });
 //Adds chloropleth data bach_deg_pct_14to18
-var geoData = "/Resources/counties.json";
+var geoData = "/Resources/final_counties.geojson";
 var geojson;
 // Grab geojson data
 d3.json(geoData, data => {
   geojson = L.choropleth(data, {
 
    // Define what  property in the features to use
-    valueProperty: "STATE",
+    valueProperty: "median_HHI_2019",
 
  // Set color scale
  scale: ["#ffffb2", "#b10026"],
 
  // Number of breaks in step range
- steps: 10,
+ steps: 8,
 
  // q for quartile, e for equidistant, k for k-means
  mode: "q",
@@ -61,8 +59,8 @@ d3.json(geoData, data => {
 
  // Binding a pop-up to each layer
  onEachFeature: function(feature, layer) {
-   layer.bindPopup("County Name: " + feature.properties.COUNTY + "<br>Median Household Income:<br>" +
-     "$" + feature.properties.NAME);
+   layer.bindPopup("County Name: " + feature.properties.NAME + "<br>Median Household Income:<br>" +
+     "$" + feature.properties.median_HHI_2019);
  }
 }).addTo(myMap);
 
