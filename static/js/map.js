@@ -41,7 +41,7 @@ var regionalLayer = L.markerClusterGroup();
 var contractLayer = L.markerClusterGroup();
 
 // Load in data on breweries
-d3.csv("/Resources/breweries_v1.csv", function(data) {
+d3.csv("/Resources/breweries_v2.csv", function(data) {
   //Makes popups and pushes them to breweriesLayer
   data.forEach(pub => {
     allBreweriesLayer.addLayer(
