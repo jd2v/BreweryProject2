@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Brewery Stuff</title>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css?family=Sanchez" rel="stylesheet">
+
+  <!-- Our CSS -->
+  <link rel="stylesheet" type="text/css" href="static/css/style.css">
+</head>
+<style>
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.box {
+  font: 10px sans-serif;
+}
+
+.box line,
+.box rect,
+.box circle {
+  fill: steelblue;
+  stroke: #000;
+  stroke-width: 1px;
+}
+
+.box .center {
+  stroke-dasharray: 3,3;
+}
+
+.box .outlier {
+  fill: none;
+  stroke: #000;
+}
+
+.axis {
+  font: 12px sans-serif;
+}
+ 
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+ 
+.x.axis path { 
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+</style>
+<body>
+    <div class="topnav">
+        <a href="powerpoint.html">Powerpoint</a>
+        <a href="map.html">Map of Breweries</a>
+        <a href="scatterplot.html">Scatterplot</a>
+        <a href="edbox.html">Education Boxplot</a>
+        <a href="incomebox.html">Income Boxplot</a>
+      </div>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="d3.v3.min.js"></script>
+<script src="static/js/incomebox.js"></script>
+<script>
+var labels = true; // show the text labels beside individual boxplots?
+
+var margin = {top: 30, right: 50, bottom: 70, left: 50};
+var  width = 800 - margin.left - margin.right;
+var height = 400 - margin.top - margin.bottom;
+	
+var min = Infinity,
+    max = -Infinity;
+	
+// parse in the data	
+d3.csv("Resources/income_sort.csv", function(error, csv) {
+	// using an array of arrays with
+	// data[n][2] 
+	// where n = number of columns in the csv file 
+	// data[i][0] = name of the ith column
+	// data[i][1] = array of values of ith column
+
+	var data = [];
+	data[0] = [];
+	data[1] = [];
+	data[2] = [];
+	data[3] = [];
+	// add more rows if your csv file has more columns
+
+	// add here the header of the csv file
+	data[0][0] = "Brewpub (n=1706)";
+	data[1][0] = "Contract (n=120)";
+	data[2][0] = "Micro (n=2545)";
+	data[3][0] = "Regional (n=156)";
+	// add more rows if your csv file has more columns
+
+	data[0][1] = [];
+	data[1][1] = [];
+	data[2][1] = [];
+	data[3][1] = [];
+
+	csv.forEach(function(x) {
+		for (i=0; i<4; i++) {
+		switch(i) {
+			case 0:
+				var v1 = Math.floor(x.Q1);
+				break;
+			case 1:
+				var v1 = Math.floor(x.Q2);
+				break;
+			case 2:
+				var v1 = Math.floor(x.Q3);
+				break;
+			case 3: 
+				var v1 = Math.floor(x.Q4);
+				break;
+		}
+		// 	v2 = Math.floor(x.Q2),
+		// 	v3 = Math.floor(x.Q3),
+		// 	v4 = Math.floor(x.Q4);
+			// add more variables if your csv file has more columns
+			
+		// var rowMax = Math.max(v1, Math.max(v2, Math.max(v3,v4)));
+		// var rowMin = Math.min(v1, Math.min(v2, Math.min(v3,v4)));
+		if (v1 > 0) {
+
+		data[i][1].push(v1)};
+		// data[1][1].push(v2);
+		// data[2][1].push(v3);
+		// data[3][1].push(v4);
+		 // add more rows if your csv file has more columns
+		 
+		if (v1 > max) max = v1;
+		if (v1 < min) min = v1;	
+	}});
+
+	console.log(data)
+  
+	var chart = d3.box()
+		.whiskers(iqr(1.5))
+		.height(height)	
+		.domain([min, max])
+		.showLabels(labels);
+
+	var svg = d3.select("body").append("svg")
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom)
+		.attr("class", "box")    
+		.append("g")
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	
+	// the x-axis
+	var x = d3.scale.ordinal()	   
+		.domain( data.map(function(d) { console.log(d); return d[0] } ) )	    
+		.rangeRoundBands([0 , width], 0.7, 0.3); 		
+
+	var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient("bottom");
+
+	// the y-axis
+	var y = d3.scale.linear()
+		.domain([min, max])
+		.range([height + margin.top, 0 + margin.top]);
+	
+	var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+	// draw the boxplots	
+	svg.selectAll(".box")	   
+      .data(data)
+	  .enter().append("g")
+		.attr("transform", function(d) { return "translate(" +  x(d[0])  + "," + margin.top + ")"; } )
+      .call(chart.width(x.rangeBand())); 
+	
+	      
+	// add a title
+	svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 0 + (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "18px") 
+        //.style("text-decoration", "underline")  
+        .text("Median Income vs. Brewery Type");
+ 
+	 // draw y axis
+	svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+		.append("text") // and text1
+		  .attr("transform", "rotate(-90)")
+		  .attr("y", 6)
+		  .attr("dy", ".71em")
+		  .style("text-anchor", "end")
+		  .style("font-size", "15px") 
+		  .text("Median Income ($)");		
+	
+	// draw x axis	
+	svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + (height  + margin.top + 10) + ")")
+      .call(xAxis)
+	  .append("text")             // text label for the x axis
+        .attr("x", (width / 2) )
+        .attr("y",  10 )
+		.attr("dy", ".71em")
+        .style("text-anchor", "middle")
+		.style("font-size", "15px") 
+        .text("Brewery Type"); 
+});
+
+// Returns a function to compute the interquartile range.
+function iqr(k) {
+  return function(d, i) {
+    var q1 = d.quartiles[0],
+        q3 = d.quartiles[2],
+        iqr = (q3 - q1) * k,
+        i = -1,
+        j = d.length;
+    while (d[++i] < q1 - iqr);
+    while (d[--j] > q3 + iqr);
+    return [i, j];
+  };
+}
+
+</script>
+</body>
