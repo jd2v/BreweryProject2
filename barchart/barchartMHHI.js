@@ -1,6 +1,9 @@
 // outside references used for this code:
 // https://www.d3-graph-gallery.com/graph/barplot_stacked_basicWide.html
 // https://bl.ocks.org/SpaceActuary/6233700e7f443b719855a227f4749ee5
+// https://www.d3-graph-gallery.com/graph/custom_legend.html
+// http://www.d3noob.org/2013/01/adding-title-to-your-d3js-graph.html#:~:text=What%20we%20want%20to%20do,append(%22text%22)%20.
+
 
 // set the dimensions and margins of the graph
 var margin = {top: 50, right: 50, bottom: 50, left: 50},
@@ -80,7 +83,38 @@ d3.csv("FinalCountyDemographicsRGmhhi.csv", function(data) {
         .attr("height", function(d) { return y(d[0]) - y(d[1]); })
         .attr("width", d => barWidth)
         .attr("transform", "translate(45," + 25 + ")");
+  
+    var legend = svg.append("g")
+        .attr("class", "legend")
+        //.attr("x", w - 65)
+        //.attr("y", 50)
+        .attr("height", 250)
+        .attr("width", 250)
+        .attr('transform', 'translate(300,300)');
     
+
+    // "#ffa535", "#ffe755", "#871282", "#afb4ff"
+    var legendColors = [["Contract","#ffa535"],
+                    ["Micro","#ffe755"],
+                    ["Regional","#871282"],
+                    ["Brewpub","#afb4ff"]];
+
+    svg.append("circle").attr("cx",800).attr("cy",75).attr("r", 6).style("fill", legendColors[3][1]);
+    svg.append("circle").attr("cx",800).attr("cy",100).attr("r", 6).style("fill", legendColors[2][1]);
+    svg.append("circle").attr("cx",800).attr("cy",125).attr("r", 6).style("fill", legendColors[1][1]);
+    svg.append("circle").attr("cx",800).attr("cy",150).attr("r", 6).style("fill", legendColors[0][1]);
+    svg.append("text").attr("x", 820).attr("y", 75).text(legendColors[0][0]).style("font-size", "15px").attr("alignment-baseline","middle");
+    svg.append("text").attr("x", 820).attr("y", 100).text(legendColors[1][0]).style("font-size", "15px").attr("alignment-baseline","middle");
+    svg.append("text").attr("x", 820).attr("y", 125).text(legendColors[2][0]).style("font-size", "15px").attr("alignment-baseline","middle");
+    svg.append("text").attr("x", 820).attr("y", 150).text(legendColors[3][0]).style("font-size", "15px").attr("alignment-baseline","middle");
+    
+    svg.append("text")
+      .attr("x", 450)             
+      .attr("y", 50)
+      .attr("text-anchor", "middle")  
+      .style("font-size", "16px") 
+      .style("text-decoration", "underline")  
+      .text("Brewery types by County Median HHI");
     // svg.append("g")
     // .attr("transform", "translate(0,600)")
     // .call(d3.axisBottom(d3.scalePoint().domain(groups).range([width/16,width-(width/16)])))
