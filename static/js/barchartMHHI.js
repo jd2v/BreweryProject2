@@ -4,6 +4,7 @@
 // https://www.d3-graph-gallery.com/graph/custom_legend.html
 // http://www.d3noob.org/2013/01/adding-title-to-your-d3js-graph.html#:~:text=What%20we%20want%20to%20do,append(%22text%22)%20.
 
+
 // set the dimensions and margins of the graph
 var margin = {top: 50, right: 50, bottom: 50, left: 50},
     width = 960 - margin.left - margin.right,
@@ -18,21 +19,21 @@ var margin = {top: 50, right: 50, bottom: 50, left: 50},
 //     .attr("transform",
 //           "translate(" + margin.left + "," + margin.top + ")");
 var svg = d3
-  .select("body")
+  .select("#hhibar")
   .append("svg")
   .attr("height", 800)
   .attr("width", 960);
 
 
 // Parse the Data
-d3.csv("FinalCountyDemographicsRGed.csv", function(data) {
+d3.csv("FinalCountyDemographicsRGmhhi.csv", function(data) {
 
   // List of subgroups = header of the csv files = soil condition here
   var subgroups = data.columns.slice(1);
   console.log(subgroups);
 
   // List of groups = species here = value of the first column called group -> I show them on the X axis
-  var groups = d3.map(data, function(d) {return(d.edBins)}).keys();
+  var groups = d3.map(data, function(d) {return(d.mhhiBins)}).keys();
   console.log(groups);
 
   // Add X axis
@@ -77,35 +78,43 @@ d3.csv("FinalCountyDemographicsRGed.csv", function(data) {
       // enter a second time = loop subgroup per subgroup to add all rectangles
       .data(function(d) { return d; })
       .enter().append("rect")
-        .attr("x", function(d) { return x(d.data.edBins); })
+        .attr("x", function(d) { return x(d.data.mhhiBins); })
         .attr("y", function(d) { return y(d[1]); })
         .attr("height", function(d) { return y(d[0]) - y(d[1]); })
         .attr("width", d => barWidth)
         .attr("transform", "translate(45," + 25 + ")");
+  
+    var legend = svg.append("g")
+        .attr("class", "legend")
+        //.attr("x", w - 65)
+        //.attr("y", 50)
+        .attr("height", 250)
+        .attr("width", 250)
+        .attr('transform', 'translate(300,300)');
     
-// "#ffa535", "#ffe755", "#871282", "#afb4ff"
-var legendColors = [["Contract","#ffa535"],
-["Micro","#ffe755"],
-["Regional","#871282"],
-["Brewpub","#afb4ff"]];
 
-svg.append("circle").attr("cx",700).attr("cy",75).attr("r", 6).style("fill", legendColors[3][1]);
-svg.append("circle").attr("cx",700).attr("cy",100).attr("r", 6).style("fill", legendColors[2][1]);
-svg.append("circle").attr("cx",700).attr("cy",125).attr("r", 6).style("fill", legendColors[1][1]);
-svg.append("circle").attr("cx",700).attr("cy",150).attr("r", 6).style("fill", legendColors[0][1]);
-svg.append("text").attr("x", 720).attr("y", 75).text(legendColors[0][0]).style("font-size", "15px").attr("alignment-baseline","middle");
-svg.append("text").attr("x", 720).attr("y", 100).text(legendColors[1][0]).style("font-size", "15px").attr("alignment-baseline","middle");
-svg.append("text").attr("x", 720).attr("y", 125).text(legendColors[2][0]).style("font-size", "15px").attr("alignment-baseline","middle");
-svg.append("text").attr("x", 720).attr("y", 150).text(legendColors[3][0]).style("font-size", "15px").attr("alignment-baseline","middle");
+    // "#ffa535", "#ffe755", "#871282", "#afb4ff"
+    var legendColors = [["Contract","#ffa535"],
+                    ["Micro","#ffe755"],
+                    ["Regional","#871282"],
+                    ["Brewpub","#afb4ff"]];
 
-svg.append("text")
-        .attr("x", 450)             
-        .attr("y", 50)
-        .attr("text-anchor", "middle")  
-        .style("font-size", "16px") 
-        .style("text-decoration", "underline")  
-        .text("Brewery types by County Bachelor Degree %");
-
+    svg.append("circle").attr("cx",800).attr("cy",75).attr("r", 6).style("fill", legendColors[3][1]);
+    svg.append("circle").attr("cx",800).attr("cy",100).attr("r", 6).style("fill", legendColors[2][1]);
+    svg.append("circle").attr("cx",800).attr("cy",125).attr("r", 6).style("fill", legendColors[1][1]);
+    svg.append("circle").attr("cx",800).attr("cy",150).attr("r", 6).style("fill", legendColors[0][1]);
+    svg.append("text").attr("x", 820).attr("y", 75).text(legendColors[0][0]).style("font-size", "15px").attr("alignment-baseline","middle");
+    svg.append("text").attr("x", 820).attr("y", 100).text(legendColors[1][0]).style("font-size", "15px").attr("alignment-baseline","middle");
+    svg.append("text").attr("x", 820).attr("y", 125).text(legendColors[2][0]).style("font-size", "15px").attr("alignment-baseline","middle");
+    svg.append("text").attr("x", 820).attr("y", 150).text(legendColors[3][0]).style("font-size", "15px").attr("alignment-baseline","middle");
+    
+    svg.append("text")
+      .attr("x", 450)             
+      .attr("y", 50)
+      .attr("text-anchor", "middle")  
+      .style("font-size", "16px") 
+      .style("text-decoration", "underline")  
+      .text("Brewery types by County Median HHI");
     // svg.append("g")
     // .attr("transform", "translate(0,600)")
     // .call(d3.axisBottom(d3.scalePoint().domain(groups).range([width/16,width-(width/16)])))
