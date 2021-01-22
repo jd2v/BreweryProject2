@@ -39,11 +39,21 @@ var brewPubLayer = L.markerClusterGroup();
 var microLayer = L.markerClusterGroup();
 var regionalLayer = L.markerClusterGroup();
 var contractLayer = L.markerClusterGroup();
+var bestLayer = L.markerClusterGroup();
+var largestLayer = L.markerClusterGroup();
 
 // Load in data on breweries
 d3.csv("/Resources/breweries_v2.csv", function(data) {
   //Makes popups and pushes them to breweriesLayer
   data.forEach(pub => {
+    if (pub.BestList == "TRUE") {
+      bestLayer.addLayer(
+        L.marker([pub.Latitude, pub.Longitude], {icon: mugIcon}).bindPopup("<h3>" + pub.BreweryName + "</h3> <hr> <h3>Type: " + pub.BreweryType + "</h3>")
+      )}
+    if (pub.LargestList == "TRUE") {
+      largestLayer.addLayer(
+        L.marker([pub.Latitude, pub.Longitude], {icon: mugIcon}).bindPopup("<h3>" + pub.BreweryName + "</h3> <hr> <h3>Type: " + pub.BreweryType + "</h3>")
+      )}
     allBreweriesLayer.addLayer(
       L.marker([pub.Latitude, pub.Longitude], {icon: mugIcon}).bindPopup("<h3>" + pub.BreweryName + "</h3> <hr> <h3>Type: " + pub.BreweryType + "</h3>")
       );
@@ -203,7 +213,9 @@ var overlays = {
   "Regional Breweries": regionalLayer,
   "Micro Breweries": microLayer,
   "BrewPubs": brewPubLayer,
-  "Contract Breweries": contractLayer
+  "Contract Breweries": contractLayer,
+  "Largest Breweries": largestLayer,
+  "Best Reviewed Breweries": bestLayer
 };
 
 // Adds layer control
