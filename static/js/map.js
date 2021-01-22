@@ -52,7 +52,7 @@ d3.csv("/Resources/breweries_v2.csv", function(data) {
       )}
     if (pub.LargestList == "TRUE") {
       largestLayer.addLayer(
-        L.marker([pub.Latitude, pub.Longitude], {icon: mugIcon}).bindPopup("<h3>" + pub.BreweryName + "</h3> <hr> <h3>Type: " + pub.BreweryType + "</h3>")
+        L.marker([pub.Latitude, pub.Longitude], {icon: kegIcon}).bindPopup("<h3>" + pub.BreweryName + "</h3> <hr> <h3>Type: " + pub.BreweryType + "</h3>")
       )}
     allBreweriesLayer.addLayer(
       L.marker([pub.Latitude, pub.Longitude], {icon: mugIcon}).bindPopup("<h3>" + pub.BreweryName + "</h3> <hr> <h3>Type: " + pub.BreweryType + "</h3>")
