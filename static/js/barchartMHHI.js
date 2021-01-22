@@ -6,9 +6,9 @@
 
 
 // set the dimensions and margins of the graph
-var margin = {top: 50, right: 50, bottom: 50, left: 50},
+var margin = {top: 50, right: 50, bottom: 100, left: 50},
     width = 960 - margin.left - margin.right,
-    height = 800 - margin.top - margin.bottom;
+    height = 1000 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 // var svg = d3.select("#my_dataviz")
@@ -21,12 +21,12 @@ var margin = {top: 50, right: 50, bottom: 50, left: 50},
 var svg = d3
   .select("#hhibar")
   .append("svg")
-  .attr("height", 800)
+  .attr("height", 1000)
   .attr("width", 960);
 
 
 // Parse the Data
-d3.csv("FinalCountyDemographicsRGmhhi.csv", function(data) {
+d3.csv("static/FinalCountyDemographicsRGmhhi.csv", function(data) {
 
   // List of subgroups = header of the csv files = soil condition here
   var subgroups = data.columns.slice(1);
@@ -42,7 +42,7 @@ d3.csv("FinalCountyDemographicsRGmhhi.csv", function(data) {
       .range([0, width])
       .padding([0.2]);
   svg.append("g")
-    .attr("transform", "translate(50," + height+25 + ")")
+    .attr("transform", "translate(50," + height + ")")
     .call(d3.axisBottom(x));
     console.log(x);
 
@@ -51,7 +51,7 @@ d3.csv("FinalCountyDemographicsRGmhhi.csv", function(data) {
     .domain([0, 2600])
     .range([ height, 0 ]);
   svg.append("g")
-  .attr("transform", "translate(50," + 25 + ")")
+  .attr("transform", "translate(50," + 0 + ")")
     .call(d3.axisLeft(y));
 
   // color palette = one color per subgroup
@@ -82,7 +82,7 @@ d3.csv("FinalCountyDemographicsRGmhhi.csv", function(data) {
         .attr("y", function(d) { return y(d[1]); })
         .attr("height", function(d) { return y(d[0]) - y(d[1]); })
         .attr("width", d => barWidth)
-        .attr("transform", "translate(45," + 25 + ")");
+        .attr("transform", "translate(45," + 0 + ")");
   
     var legend = svg.append("g")
         .attr("class", "legend")
