@@ -25,7 +25,7 @@ var svg = d3
 
 
 // Parse the Data
-d3.csv("FinalCountyDemographicsRGed.csv", function(data) {
+d3.csv("static/FinalCountyDemographicsRGed.csv", function(data) {
 
   // List of subgroups = header of the csv files = soil condition here
   var subgroups = data.columns.slice(1);
@@ -41,7 +41,7 @@ d3.csv("FinalCountyDemographicsRGed.csv", function(data) {
       .range([0, width])
       .padding([0.2]);
   svg.append("g")
-    .attr("transform", "translate(50," + height+25 + ")")
+    .attr("transform", "translate(50," + height + ")")
     .call(d3.axisBottom(x));
     console.log(x);
 
@@ -50,7 +50,7 @@ d3.csv("FinalCountyDemographicsRGed.csv", function(data) {
     .domain([0, 2600])
     .range([ height, 0 ]);
   svg.append("g")
-  .attr("transform", "translate(50," + 25 + ")")
+  .attr("transform", "translate(50," + 0 + ")")
     .call(d3.axisLeft(y));
 
   // color palette = one color per subgroup
@@ -81,7 +81,7 @@ d3.csv("FinalCountyDemographicsRGed.csv", function(data) {
         .attr("y", function(d) { return y(d[1]); })
         .attr("height", function(d) { return y(d[0]) - y(d[1]); })
         .attr("width", d => barWidth)
-        .attr("transform", "translate(45," + 25 + ")");
+        .attr("transform", "translate(45," + 0 + ")");
     
 // "#ffa535", "#ffe755", "#871282", "#afb4ff"
 var legendColors = [["Contract","#ffa535"],
