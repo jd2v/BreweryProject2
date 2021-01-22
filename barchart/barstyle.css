@@ -1,0 +1,13 @@
+html,
+body {
+  padding: 100;
+  margin: 100;
+}
+
+.bar {
+  fill: orange;
+}
+
+.bar:hover {
+  fill: green;
+}
