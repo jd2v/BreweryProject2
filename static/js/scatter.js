@@ -41,7 +41,7 @@ d3.csv("/Resources/FinalCountyDemographics.csv", function(data) {
     .style("border-width", "1px")
     .style("border-radius", "5px")
     .style("padding", "10px")
-  // A function that changes this tooltip when the user hover a point.
+  // A function that changes tooltip when hovering over a point.
   var mouseover = function(d) {
     tooltip
       .style("opacity", 1)
